@@ -14,6 +14,18 @@ Plot multivariate data on a two dimensional chart across axes.
 ##### [transform-loader](https://www.npmjs.com/package/transform-loader)
 ##### [brfs](https://www.npmjs.com/package/brfs)
 
+# Required Fields
+##### key
+Key to graph
+##### axis
+Axis to plot
+##### value
+Value for key,axis pair
+
+# Optional Fields
+##### keyColor
+Append to each key,axis,value row to dynamically style the area color. Must be a hex value.
+
 # Sample Searches
 ```
 | makeresults 
