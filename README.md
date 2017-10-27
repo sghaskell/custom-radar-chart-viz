@@ -38,5 +38,49 @@ Append to each key,axis,value row to dynamically style the area color. Must be a
     | eval keyColor="#33FF55"
         ]
 ```
+
+# Formatting Options
+### General
+###### Height
+Chart Height
+###### Width
+Chart Width
+###### Max Value
+Maximum value
+###### Levels
+Number of levels for chart
+###### Format
+Format the scale - see [d3-format docs](https://github.com/d3/d3-format)
+###### Rounded
+Enable or disable rounded lines between conncting points
+###### Full Screen Mode
+Enable or disable full screen mode. Dynamically adjust chart size from browser resize.
+
+### Legend
+###### Show Legend
+Enable or disable legend
+###### Legend Symbol
+Symobl used for each legend key
+###### Legend Toggle Symbol
+Symbol used when key is toggled
+###### Position X
+Position of legend on X axis
+###### Position Y
+Position of legend on Y axis
+
+### Colors
+###### Axes Line Color
+Color of line that divides the axes (Hex value)
+###### Circles Color
+Color of circles (Hex value)
+###### Circles Fill Color
+Fill color of circles (Hex value)
+
+### Opacity
+###### Areas Opacity
+Opacity of the area on chart (range: 0 - 1.0)
+###### Circles Opacity
+Opacity of circles (range: 0 - 1.0)
+
 # Support
 ###### This app is supported by Scott Haskell ([shaskell@splunk.com](mailto:shaskell@splunk.com))
