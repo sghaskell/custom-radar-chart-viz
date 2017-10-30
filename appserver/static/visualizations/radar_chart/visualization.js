@@ -9060,44 +9060,44 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	                var radarChartOptions = this.radarChartOptions = {};
 	                var allAxes = this.allAxes = [];
 
-	                // Set default options from format parameters
-	                this.radarChartOptions = {
-	                    width: chartWidth,
-	                    height: chartHeight,
-	                    format: format,
-	                    legend: {
-	                        display: this.isArgTrue(legendEnabled),
-	                        symbol: legendSymbol,
-	                        toggle: legendToggleSymbol,
-	                        position: {x: legendPositionX, y: legendPositionY}
-	                    },
-	                    areas: {
-	                        opacity: areasOpacity
-	                    },
-	                    circles: {
-	                        color: circlesColor,
-	                        fill: circlesFillColor,
-	                        opacity: circlesOpacity
-	                    },
-	                    axes: {
-	                        lineColor: axesLineColor
-	                    }
-	                };
-	                
-	                // Create radar chart
-	                var radarChart = this.radarChart = new RadarChart(format);
-	                this.radarChart
-	                    .options(this.radarChartOptions)
-	                    .rounded(this.isArgTrue(isRounded))
-	                    .maxValue(maxValue) 
-	                    .levels(levels) 
-	                    .update();
-
 	                d3.select(this.el)
 	                  .call(this.radarChart);
 
 	                this.isInitializedDom = true;
 	            }
+
+				// Set default options from format parameters
+				this.radarChartOptions = {
+					width: chartWidth,
+					height: chartHeight,
+					format: format,
+					legend: {
+						display: this.isArgTrue(legendEnabled),
+						symbol: legendSymbol,
+						toggle: legendToggleSymbol,
+						position: {x: legendPositionX, y: legendPositionY}
+					},
+					areas: {
+						opacity: areasOpacity
+					},
+					circles: {
+						color: circlesColor,
+						fill: circlesFillColor,
+						opacity: circlesOpacity
+					},
+					axes: {
+						lineColor: axesLineColor
+					}
+				};
+				
+				// Create radar chart
+				var radarChart = this.radarChart = new RadarChart(format);
+				this.radarChart
+					.options(this.radarChartOptions)
+					.rounded(this.isArgTrue(isRounded))
+					.maxValue(maxValue) 
+					.levels(levels) 
+					.update();
 
 	            // Get parent element of div to resize
 	            var parentEl = $(this.el).parent().parent().closest("div").attr("data-cid");
