@@ -184,6 +184,9 @@ define([
                 var radarChartOptions = this.radarChartOptions = {};
                 var allAxes = this.allAxes = [];
 
+				// Create radar chart
+				var radarChart = this.radarChart = new RadarChart(format);
+
                 d3.select(this.el)
                   .call(this.radarChart);
 
@@ -214,8 +217,6 @@ define([
 				}
 			};
 			
-			// Create radar chart
-			var radarChart = this.radarChart = new RadarChart(format);
 			this.radarChart
 				.options(this.radarChartOptions)
 				.rounded(this.isArgTrue(isRounded))
