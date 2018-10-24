@@ -253,7 +253,7 @@ RadarChart = function (format) {
                     .attr("y", function(d) { return -d * radial_calcs.radius / options.circles.levels; })
                     .attr("dy", "0.4em")
                     .style("font-size", "10px")
-                    .attr("fill", options.legend.axesLabelFontColor)
+                    .attr("fill", options.axes.axesLabelFontColor)
                     .on('mouseover', function(d, i) { if (events.axisLabel.mouseover) events.axisLabel.mouseover(d, i); })
                     .on('mouseout', function(d, i) { if (events.axisLabel.mouseout) events.axisLabel.mouseout(d, i); })
                     .text(function(d, i) { if (radial_calcs.maxValue) return Format(radial_calcs.maxValue * d / options.circles.levels); });
