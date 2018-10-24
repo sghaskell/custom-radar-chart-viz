@@ -23,6 +23,7 @@ define([
     // Extend from SplunkVisualizationBase
     return SplunkVisualizationBase.extend({
         validFields: ["key","axis","value","keyColor"],
+        allAxes: [],
         defaultConfig: {
             'display.visualizations.custom.custom-radar-chart-viz.radar_chart.chartHeight': 500,
             'display.visualizations.custom.custom-radar-chart-viz.radar_chart.chartWidth': 500,
@@ -37,7 +38,10 @@ define([
             'display.visualizations.custom.custom-radar-chart-viz.radar_chart.legendToggleSymbol': "circle",
             'display.visualizations.custom.custom-radar-chart-viz.radar_chart.legendPositionX': 25,
             'display.visualizations.custom.custom-radar-chart-viz.radar_chart.legendPositionY': 25,
+            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.legendFontColor': "black",
             'display.visualizations.custom.custom-radar-chart-viz.radar_chart.axesLineColor': "white",
+            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.axesLabelFontColor': "#737373",
+            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.axesLegendFontColor': "black",
             'display.visualizations.custom.custom-radar-chart-viz.radar_chart.circlesColor': "#CDCDCD",
             'display.visualizations.custom.custom-radar-chart-viz.radar_chart.circlesFillColor': "#CDCDCD",
             'display.visualizations.custom.custom-radar-chart-viz.radar_chart.areasOpacity': 0.35,
@@ -139,7 +143,7 @@ define([
                         this.allAxes.push(v.axis);
                     }
                 } catch(err) {
-                    console.log(err);
+                    console.error(err);
                 }
             }, this);
 
@@ -171,8 +175,11 @@ define([
                 legendSymbol= this._getEscapedProperty('legendSymbol', config) || "cross",
                 legendToggleSymbol= this._getEscapedProperty('legendToggleSymbol', config) || "circle",
                 legendPositionX = parseInt(this._getEscapedProperty('legendPositionX', config)) || 25,
-                legendPositionY = parseInt(this._getEscapedProperty('legendPositionY', config)) || 25
+                legendPositionY = parseInt(this._getEscapedProperty('legendPositionY', config)) || 25,
+                legendFontColor = this._getEscapedProperty('legendFontColor', config) || "black",
                 axesLineColor = this._getEscapedProperty('axesLineColor', config) || "white",
+                axesLabelFontColor = this._getEscapedProperty('axesLabelFontColor', config) || "#737373",
+                axesLegendFontColor = this._getEscapedProperty('axesLegendFontColor', config) || "black",
                 circlesColor = this._getEscapedProperty('circlesColor', config) || "#CDCDCD",
                 circlesFillColor = this._getEscapedProperty('circlesFillColor', config) || "#CDCDCD",
                 areasOpacity = parseFloat(this._getEscapedProperty('areasOpacity', config)),
@@ -182,7 +189,7 @@ define([
             // Initialize Viz
             if (!this.isInitializedDom) {
                 var radarChartOptions = this.radarChartOptions = {};
-                var allAxes = this.allAxes = [];
+                this.allAxes = [];
 
 				// Create radar chart
 				var radarChart = this.radarChart = new RadarChart(format);
@@ -202,7 +209,8 @@ define([
 					display: this.isArgTrue(legendEnabled),
 					symbol: legendSymbol,
 					toggle: legendToggleSymbol,
-					position: {x: legendPositionX, y: legendPositionY}
+                    position: {x: legendPositionX, y: legendPositionY},
+                    fontColor: legendFontColor
 				},
 				areas: {
 					opacity: areasOpacity
@@ -213,7 +221,9 @@ define([
 					opacity: circlesOpacity
 				},
 				axes: {
-					lineColor: axesLineColor
+                    lineColor: axesLineColor,
+                    axesLabelFontColor: axesLabelFontColor,
+                    axesLegendFontColor: axesLegendFontColor
 				}
 			};
 			
@@ -277,7 +287,7 @@ define([
                         v.isCharted = true;
                     }
                 } catch (err) {
-                    console.log(err);
+                    console.error(err);
                 }
             }, this); 
 
