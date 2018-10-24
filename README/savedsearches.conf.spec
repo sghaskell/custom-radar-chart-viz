@@ -14,8 +14,8 @@ display.visualizations.custom.custom-radar-chart-viz.radar_chart.legendPositionX
 display.visualizations.custom.custom-radar-chart-viz.radar_chart.legendPositionY = <int>
 display.visualizations.custom.custom-radar-chart-viz.radar_chart.legendFontColor = <string>
 display.visualizations.custom.custom-radar-chart-viz.radar_chart.axesLineColor = <string>
-display.visualizations.custom.custom-radar-chart-viz.radar_chart.axisLabelFontColor = <string>
-display.visualizations.custom.custom-radar-chart-viz.radar_chart.axisLegendFontColor = <string>
+display.visualizations.custom.custom-radar-chart-viz.radar_chart.axesLabelFontColor = <string>
+display.visualizations.custom.custom-radar-chart-viz.radar_chart.axesLegendFontColor = <string>
 display.visualizations.custom.custom-radar-chart-viz.radar_chart.circlesColor = <string>
 display.visualizations.custom.custom-radar-chart-viz.radar_chart.circlesFillColor = <string>
 display.visualizations.custom.custom-radar-chart-viz.radar_chart.areasOpacity = <float>
