@@ -8941,7 +8941,10 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.legendToggleSymbol': "circle",
 	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.legendPositionX': 25,
 	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.legendPositionY': 25,
+	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.legendFontColor': "black",
 	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.axesLineColor': "white",
+	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.axesLabelFontColor': "#737373",
+	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.axesLegendFontColor': "black",
 	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.circlesColor': "#CDCDCD",
 	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.circlesFillColor': "#CDCDCD",
 	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.areasOpacity': 0.35,
@@ -9075,8 +9078,11 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	                legendSymbol= this._getEscapedProperty('legendSymbol', config) || "cross",
 	                legendToggleSymbol= this._getEscapedProperty('legendToggleSymbol', config) || "circle",
 	                legendPositionX = parseInt(this._getEscapedProperty('legendPositionX', config)) || 25,
-	                legendPositionY = parseInt(this._getEscapedProperty('legendPositionY', config)) || 25
+	                legendPositionY = parseInt(this._getEscapedProperty('legendPositionY', config)) || 25,
+	                legendFontColor = this._getEscapedProperty('legendFontColor', config) || "black",
 	                axesLineColor = this._getEscapedProperty('axesLineColor', config) || "white",
+	                axesLabelFontColor = this._getEscapedProperty('axesLabelFontColor', config) || "#737373",
+	                axesLegendFontColor = this._getEscapedProperty('axesLegendFontColor', config) || "black",
 	                circlesColor = this._getEscapedProperty('circlesColor', config) || "#CDCDCD",
 	                circlesFillColor = this._getEscapedProperty('circlesFillColor', config) || "#CDCDCD",
 	                areasOpacity = parseFloat(this._getEscapedProperty('areasOpacity', config)),
@@ -9106,7 +9112,8 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 						display: this.isArgTrue(legendEnabled),
 						symbol: legendSymbol,
 						toggle: legendToggleSymbol,
-						position: {x: legendPositionX, y: legendPositionY}
+	                    position: {x: legendPositionX, y: legendPositionY},
+	                    fontColor: legendFontColor
 					},
 					areas: {
 						opacity: areasOpacity
@@ -9117,7 +9124,9 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 						opacity: circlesOpacity
 					},
 					axes: {
-						lineColor: axesLineColor
+	                    lineColor: axesLineColor,
+	                    axesLabelFontColor: axesLabelFontColor,
+	                    axesLegendFontColor: axesLegendFontColor
 					}
 				};
 				
@@ -30880,6 +30889,7 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	    shapeHeight = 15,
 	    shapeRadius = 10,
 	    shapePadding = 2,
+	    fontColor = "black",
 	    cells = [5],
 	    labels = [],
 	    useClass = false,
@@ -30908,7 +30918,7 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 
 	      helper.d3_drawShapes(shape, shapes, shapeHeight, shapeWidth, shapeRadius, path);
 
-	      helper.d3_addText(svg, cellEnter, type.labels)
+	      helper.d3_addText(svg, cellEnter, type.labels, fontColor)
 
 	      // sets placement
 	      var text = cell.select("text"),
@@ -30971,6 +30981,12 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	    }
 	    return legend;
 	  };
+
+	  legend.fontColor = function(_) {
+	    if (!arguments.length) return legend;
+	    fontColor = _;
+	    return legend;
+	  };  
 
 	  legend.shapeWidth = function(_) {
 	    if (!arguments.length) return legend;
@@ -31144,9 +31160,8 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	  }
 	},
 
-	d3_addText: function (svg, enter, labels){
-	  //enter.append("text").attr("class", "label");
-	  enter.append("text").attr("class", "foola");
+	d3_addText: function (svg, enter, labels, fontColor){
+	  enter.append("text").attr("class", "label").attr("fill", fontColor);
 	  svg.selectAll("g.cell text").data(labels).text(this.d3_identity);
 	},
 
@@ -31212,6 +31227,7 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	    shape = "rect",
 	    shapeWidth = 15,
 	    shapePadding = 2,
+	    fontColor = "black",
 	    cells = [5],
 	    labels = [],
 	    useStroke = false,
@@ -31246,7 +31262,7 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	        helper.d3_drawShapes(shape, shapes, type.feature, type.feature, type.feature, path);
 	      }
 
-	      helper.d3_addText(svg, cellEnter, type.labels)
+	      helper.d3_addText(svg, cellEnter, type.labels, fontColor)
 
 	      //sets placement
 	      var text = cell.select("text"),
@@ -31311,6 +31327,11 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	    return legend;
 	  };
 
+	  legend.fontColor = function(_) {
+	    if (!arguments.length) return legend;
+	    fontColor = _;
+	    return legend;
+	  };
 
 	  legend.shape = function(_, d) {
 	    if (!arguments.length) return legend;
@@ -31398,6 +31419,7 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	    shapeHeight = 15,
 	    shapeRadius = 10,
 	    shapePadding = 5,
+	    fontColor = "black",
 	    cells = [5],
 	    labels = [],
 	    useClass = false,
@@ -31425,7 +31447,7 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	      cell.exit().transition().style("opacity", 0).remove();
 
 	      helper.d3_drawShapes(shape, shapes, shapeHeight, shapeWidth, shapeRadius, type.feature);
-	      helper.d3_addText(svg, cellEnter, type.labels)
+	      helper.d3_addText(svg, cellEnter, type.labels, fontColor)
 
 	      // sets placement
 	      var text = cell.select("text"),
@@ -31470,6 +31492,12 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	    return legend;
 	  };
 
+	  legend.fontColor = function(_) {
+	    if (!arguments.length) return legend;
+	    fontColor = _;
+	    return legend;
+	  };
+	  
 	  legend.shapePadding = function(_) {
 	    if (!arguments.length) return legend;
 	    shapePadding = +_;
@@ -31611,7 +31639,8 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	         lineColor: "white",
 	         lineWidth: "2px",
 	         fontWidth: "11px",
-	         fontColor: "black",
+	         axesLabelFontColor: "#737373",
+	         axesLegendFontColor: "#000000",
 	         wrapWidth: 60,       // The number of pixels after which a label needs to be given a new line
 	         filter: [],
 	         invert: [],
@@ -31622,7 +31651,8 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	         display: false,
 	         symbol: 'cross', // 'circle', 'cross', 'diamond', 'triangle-up', 'triangle-down'
 	         toggle: 'circle',
-	         position: { x: 25, y: 25 }
+	         position: { x: 25, y: 25 },
+	         fontColor: "#000000"
 	      },
 
 	      class: "rc",
@@ -31800,7 +31830,7 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	                    .attr("y", function(d) { return -d * radial_calcs.radius / options.circles.levels; })
 	                    .attr("dy", "0.4em")
 	                    .style("font-size", "10px")
-	                    .attr("fill", "#737373")
+	                    .attr("fill", options.legend.axesLabelFontColor)
 	                    .on('mouseover', function(d, i) { if (events.axisLabel.mouseover) events.axisLabel.mouseover(d, i); })
 	                    .on('mouseout', function(d, i) { if (events.axisLabel.mouseout) events.axisLabel.mouseout(d, i); })
 	                    .text(function(d, i) { if (radial_calcs.maxValue) return Format(radial_calcs.maxValue * d / options.circles.levels); });
@@ -31856,6 +31886,7 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	                    .append("text")
 	                    .attr("class", options.class + "AxisLegend")
 	                    .style("font-size", options.axes.fontWidth)
+	                    .attr("fill", options.axes.axesLegendFontColor)
 	                    .attr("text-anchor", "middle")
 	                    .attr("dy", "0.35em")
 	                    .attr("x", function(d, i, j) { return calcX(null, options.circles.labelFactor, j); })
@@ -32026,6 +32057,7 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	                   if (d3.legend) {
 	                      var legendOrdinal = d3.legend.color()
 	                         .shape("path", shape)
+	                         .fontColor(options.legend.fontColor)
 	                         .shapePadding(10)
 	                         .scale(colorScale)
 	                         .labels(colorScale.domain().map(function(m) { return keyScale(m); } ))
