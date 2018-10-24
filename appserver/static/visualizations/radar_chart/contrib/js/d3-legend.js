@@ -9,6 +9,7 @@ module.exports = function(){
     shapeHeight = 15,
     shapeRadius = 10,
     shapePadding = 2,
+    fontColor = "black",
     cells = [5],
     labels = [],
     useClass = false,
@@ -37,7 +38,7 @@ module.exports = function(){
 
       helper.d3_drawShapes(shape, shapes, shapeHeight, shapeWidth, shapeRadius, path);
 
-      helper.d3_addText(svg, cellEnter, type.labels)
+      helper.d3_addText(svg, cellEnter, type.labels, fontColor)
 
       // sets placement
       var text = cell.select("text"),
@@ -100,6 +101,12 @@ module.exports = function(){
     }
     return legend;
   };
+
+  legend.fontColor = function(_) {
+    if (!arguments.length) return legend;
+    fontColor = _;
+    return legend;
+  };  
 
   legend.shapeWidth = function(_) {
     if (!arguments.length) return legend;
@@ -273,9 +280,8 @@ d3_drawShapes: function (shape, shapes, shapeHeight, shapeWidth, shapeRadius, pa
   }
 },
 
-d3_addText: function (svg, enter, labels){
-  //enter.append("text").attr("class", "label");
-  enter.append("text").attr("class", "foola");
+d3_addText: function (svg, enter, labels, fontColor){
+  enter.append("text").attr("class", "label").attr("fill", fontColor);
   svg.selectAll("g.cell text").data(labels).text(this.d3_identity);
 },
 
@@ -341,6 +347,7 @@ module.exports =  function(){
     shape = "rect",
     shapeWidth = 15,
     shapePadding = 2,
+    fontColor = "black",
     cells = [5],
     labels = [],
     useStroke = false,
@@ -375,7 +382,7 @@ module.exports =  function(){
         helper.d3_drawShapes(shape, shapes, type.feature, type.feature, type.feature, path);
       }
 
-      helper.d3_addText(svg, cellEnter, type.labels)
+      helper.d3_addText(svg, cellEnter, type.labels, fontColor)
 
       //sets placement
       var text = cell.select("text"),
@@ -440,6 +447,11 @@ module.exports =  function(){
     return legend;
   };
 
+  legend.fontColor = function(_) {
+    if (!arguments.length) return legend;
+    fontColor = _;
+    return legend;
+  };
 
   legend.shape = function(_, d) {
     if (!arguments.length) return legend;
@@ -527,6 +539,7 @@ module.exports = function(){
     shapeHeight = 15,
     shapeRadius = 10,
     shapePadding = 5,
+    fontColor = "black",
     cells = [5],
     labels = [],
     useClass = false,
@@ -554,7 +567,7 @@ module.exports = function(){
       cell.exit().transition().style("opacity", 0).remove();
 
       helper.d3_drawShapes(shape, shapes, shapeHeight, shapeWidth, shapeRadius, type.feature);
-      helper.d3_addText(svg, cellEnter, type.labels)
+      helper.d3_addText(svg, cellEnter, type.labels, fontColor)
 
       // sets placement
       var text = cell.select("text"),
@@ -599,6 +612,12 @@ module.exports = function(){
     return legend;
   };
 
+  legend.fontColor = function(_) {
+    if (!arguments.length) return legend;
+    fontColor = _;
+    return legend;
+  };
+  
   legend.shapePadding = function(_) {
     if (!arguments.length) return legend;
     shapePadding = +_;
