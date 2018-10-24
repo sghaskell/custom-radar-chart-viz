@@ -23,6 +23,7 @@ define([
     // Extend from SplunkVisualizationBase
     return SplunkVisualizationBase.extend({
         validFields: ["key","axis","value","keyColor"],
+        allAxes: [],
         defaultConfig: {
             'display.visualizations.custom.custom-radar-chart-viz.radar_chart.chartHeight': 500,
             'display.visualizations.custom.custom-radar-chart-viz.radar_chart.chartWidth': 500,
@@ -142,7 +143,7 @@ define([
                         this.allAxes.push(v.axis);
                     }
                 } catch(err) {
-                    console.log(err);
+                    console.error(err);
                 }
             }, this);
 
@@ -188,7 +189,7 @@ define([
             // Initialize Viz
             if (!this.isInitializedDom) {
                 var radarChartOptions = this.radarChartOptions = {};
-                var allAxes = this.allAxes = [];
+                this.allAxes = [];
 
 				// Create radar chart
 				var radarChart = this.radarChart = new RadarChart(format);
@@ -286,7 +287,7 @@ define([
                         v.isCharted = true;
                     }
                 } catch (err) {
-                    console.log(err);
+                    console.error(err);
                 }
             }, this); 
 
