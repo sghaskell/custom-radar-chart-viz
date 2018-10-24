@@ -62,7 +62,8 @@ RadarChart = function (format) {
          lineColor: "white",
          lineWidth: "2px",
          fontWidth: "11px",
-         fontColor: "black",
+         axesLabelFontColor: "#737373",
+         axesLegendFontColor: "#000000",
          wrapWidth: 60,       // The number of pixels after which a label needs to be given a new line
          filter: [],
          invert: [],
@@ -73,7 +74,8 @@ RadarChart = function (format) {
          display: false,
          symbol: 'cross', // 'circle', 'cross', 'diamond', 'triangle-up', 'triangle-down'
          toggle: 'circle',
-         position: { x: 25, y: 25 }
+         position: { x: 25, y: 25 },
+         fontColor: "#000000"
       },
 
       class: "rc",
@@ -251,7 +253,7 @@ RadarChart = function (format) {
                     .attr("y", function(d) { return -d * radial_calcs.radius / options.circles.levels; })
                     .attr("dy", "0.4em")
                     .style("font-size", "10px")
-                    .attr("fill", "#737373")
+                    .attr("fill", options.legend.axesLabelFontColor)
                     .on('mouseover', function(d, i) { if (events.axisLabel.mouseover) events.axisLabel.mouseover(d, i); })
                     .on('mouseout', function(d, i) { if (events.axisLabel.mouseout) events.axisLabel.mouseout(d, i); })
                     .text(function(d, i) { if (radial_calcs.maxValue) return Format(radial_calcs.maxValue * d / options.circles.levels); });
@@ -307,6 +309,7 @@ RadarChart = function (format) {
                     .append("text")
                     .attr("class", options.class + "AxisLegend")
                     .style("font-size", options.axes.fontWidth)
+                    .attr("fill", options.axes.axesLegendFontColor)
                     .attr("text-anchor", "middle")
                     .attr("dy", "0.35em")
                     .attr("x", function(d, i, j) { return calcX(null, options.circles.labelFactor, j); })
@@ -477,6 +480,7 @@ RadarChart = function (format) {
                    if (d3.legend) {
                       var legendOrdinal = d3.legend.color()
                          .shape("path", shape)
+                         .fontColor(options.legend.fontColor)
                          .shapePadding(10)
                          .scale(colorScale)
                          .labels(colorScale.domain().map(function(m) { return keyScale(m); } ))
