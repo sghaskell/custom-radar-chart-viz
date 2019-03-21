@@ -35,7 +35,7 @@ Chart Height
 ###### Width
 Chart Width
 ###### Max Value
-Maximum value
+Maximum value. Only applies if max value exceeds largest value for any axis, otherwise chart will auto-scale to the data.
 ###### Levels
 Number of levels for chart
 ###### Format

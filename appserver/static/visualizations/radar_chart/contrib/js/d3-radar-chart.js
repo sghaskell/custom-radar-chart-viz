@@ -529,14 +529,15 @@ RadarChart = function (format) {
        var ranges = {};
 
        // determine min/max range for each axis
-       _data.forEach( function(e) { e.values.forEach (function(d, i) { 
+       _data.forEach( function(e) { e.values.forEach (function(d, i) {
           var range = ranges[axes[i]] ?                        // already started?
                       ranges[axes[i]] 
                       : options.axes.ranges[axes[i]] ?         // rande defined in options?
                         options.axes.ranges[axes[i]].slice()
                         : [0, 1];                              // default
-          var max = d.value > range[1] ? d.value : range[1];
-          var min = d.value < range[0] ? d.value : range[0];
+          
+          var max = parseFloat(d.value) > parseFloat(range[1]) ? parseFloat(d.value) : parseFloat(range[1]);
+          var min = parseFloat(d.value) < parseFloat(range[0]) ? parseFloat(d.value) : parseFloat(range[0]);         
           ranges[axes[i]] = [min, max];                        // update
        }) });
 
@@ -600,8 +601,8 @@ RadarChart = function (format) {
          axisLabels: axisLabels,
 
          // If the supplied maxValue is smaller than the actual one, replace by the max in the data
-         maxValue: Math.max(options.circles.maxValue, d3.max(_data, function(i) { 
-            return d3.max(i.values.map( function(o) { return o.value; })) 
+         maxValue: Math.max(options.circles.maxValue, d3.max(_data, function(i) {
+            return d3.max(i.values.map( function(o) { return parseFloat(o.value); })) 
          }))
       }
       radial_calcs.radius = Math.max(radial_calcs.radius, options.minRadius);
