@@ -9098,10 +9098,8 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	            if (!this.isInitializedDom) {
 	                var radarChart = this.radarChart = {}
 	                var radarChartOptions = this.radarChartOptions = {}
-	                this.allAxes = []
 
 					// Create radar chart
-	                //var radarChart = this.radarChart = new RadarChart(format)
 	                this.radarChart = new RadarChart(format)
 	                
 	                d3.select(this.el)
