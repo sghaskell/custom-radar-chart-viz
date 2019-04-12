@@ -8928,6 +8928,7 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	    return SplunkVisualizationBase.extend({
 	        validFields: ["key","axis","value","keyColor"],
 	        allAxes: [],
+	        categories: {},
 	        defaultConfig: {
 	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.chartHeight': 500,
 	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.chartWidth': 500,
@@ -8951,21 +8952,23 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.areasOpacity': 0.35,
 	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.circlesOpacity': 0.1
 	        },
-	        category: function(key, name, data) {
+	        //category: function(key, name, data) {
+	        category: function(key, options) {    
 	            this.key = key;
 	            this.axes = [];
-	            this.axes.push(name);
+	            this.axes.push(options.name);
 	            this.isInit = false;
 	            this.isCharted = false;
 	            this.vals = [];
 
 	            if(!this.isInit) {
-	                this.vals.push({axis: name, value: data}); 
+	                this.vals.push({axis: options.name, value: options.data}); 
 	                this.isInit = true;
 	            }
 
-	            this.update = function (name, data) {
-	                this.vals.push({axis: name, value: data}); 
+	            //this.update = function (name, data) {
+	            this.update = function (name, options) {
+	                this.vals.push({axis: name, value: options.data}); 
 	                this.axes.push(name);
 	            };
 
@@ -9017,8 +9020,9 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	        // Optionally implement to format data returned from search. 
 	        // The returned object will be passed to updateView as 'data'
 	        formatData: function(data) {
-	            //var dataRows = data.results
-	            var categories = this.categories = {};
+	            // Clear axes and categories
+	            this.allAxes = []
+	            this.categories = {}
 
 	            if(!data.results || data.results.length === 0) {
 	                return this;
@@ -9031,11 +9035,11 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	                try {
 	                    // Key exists, update
 	                    if(_.has(this.categories, v.key) && !this.categories[v.key].isCharted) {
-	                        this.categories[v.key].update(v.axis, v.value);
+	                        this.categories[v.key].update(v.axis, {data: v.value});
 	                    } else {
 	                        if(v.key) {
 	                            // Create new category
-	                            var c = new this.category(v.key,v.axis,v.value);
+	                            var c = new this.category(v.key, {name: v.axis, data: v.value});
 	                            if(_.has(v, "keyColor")) {
 	                                c.keyColor = v.keyColor;
 	                            }
@@ -9056,13 +9060,13 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	                v.fillMissingAxis(this.allAxes);  
 	            }, this); 
 	            
-	            return data;
+	            return this.categories
 	        },
 	  
 	        // Implement updateView to render a visualization.
 	        //  'data' will be the data object returned from formatData or from the search
 	        //  'config' will be the configuration property object
-	        updateView: function(data, config) {
+	        updateView: function(categories, config) {
 	            if(_.keys(config).length <= 1) {
 	                config = this.defaultConfig;
 	            }
@@ -9092,16 +9096,16 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 
 	            // Initialize Viz
 	            if (!this.isInitializedDom) {
-	                var radarChartOptions = this.radarChartOptions = {};
-	                this.allAxes = [];
+	                var radarChart = this.radarChart = {}
+	                var radarChartOptions = this.radarChartOptions = {}
 
 					// Create radar chart
-					var radarChart = this.radarChart = new RadarChart(format);
-
+	                this.radarChart = new RadarChart(format)
+	                
 	                d3.select(this.el)
-	                  .call(this.radarChart);
+	                  .call(this.radarChart)
 
-	                this.isInitializedDom = true;
+	                this.isInitializedDom = true
 	            }
 
 				// Set default options from format parameters
@@ -9157,26 +9161,7 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	                this.radarChart.options({height: chartHeight, width: chartWidth}).update();
 	            }
 
-	            _.each(this.categories, function(v, i, obj) {
-	                // Sort the keys
-	                // leaving this for now in case we need to revert back
-	                /*
-	                v.vals.sort(function(a,b) {
-	                    var nameA = a.axis.toUpperCase();
-	                    var nameB = b.axis.toUpperCase();
-
-	                    if(nameA < nameB) {
-	                        return -1;
-	                    }
-
-	                    if(nameA > nameB) {
-	                        return 1;
-	                    }
-
-	                    return 0;
-	                });
-	                */
-
+	            _.each(categories, function(v, i, obj) {
 	                try {
 	                    if(!v.isCharted) {
 	                        this.radarChart.push({key: v.key, values: v.vals});
