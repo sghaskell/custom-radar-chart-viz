@@ -78,6 +78,28 @@ define([
             };
         }, 
 
+        onConfigChange: function(configChanges, previousConfig) {
+            const configBase = this.getPropertyNamespaceInfo().propertyNamespace
+            legendEnabled = this._propertyExists('legendEnabled', configChanges) ? this.isArgTrue(parseInt(this._getEscapedProperty('legendEnabled', configChanges))):this.isArgTrue(parseInt(this._getEscapedProperty('legendEnabled', previousConfig)))
+
+            if(legendEnabled) {
+                this.radarChart.options({legend: {display: true}}).rounded(true).update()
+                $('.rcLegend').show()
+            } else {
+                $('.rcLegend').hide()
+            }
+    
+        },
+
+        _propertyExists: function(name, config) {
+            return _.has(config, this.getPropertyNamespaceInfo().propertyNamespace + name)
+        },
+
+        _getSafeUrlProperty: function(name, config) {
+            var propertyValue = config[this.getPropertyNamespaceInfo().propertyNamespace + name]
+            return SplunkVisualizationUtils.makeSafeUrl(propertyValue)
+        },
+        
         _getEscapedProperty: function(name, config) {
             var propertyValue = config[this.getPropertyNamespaceInfo().propertyNamespace + name];
             return SplunkVisualizationUtils.escapeHtml(propertyValue);
