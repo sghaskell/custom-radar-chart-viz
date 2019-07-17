@@ -83,16 +83,70 @@ define([
         }, 
 
         onConfigChange: function(configChanges, previousConfig) {
-            const configBase = this.getPropertyNamespaceInfo().propertyNamespace
-            legendEnabled = this._propertyExists('legendEnabled', configChanges) ? this.isArgTrue(parseInt(this._getEscapedProperty('legendEnabled', configChanges))):this.isArgTrue(parseInt(this._getEscapedProperty('legendEnabled', previousConfig)))
+            var legendEnabled = this._propertyExists('legendEnabled', configChanges) ? this.isArgTrue(parseInt(this._getEscapedProperty('legendEnabled', configChanges))):this.isArgTrue(parseInt(this._getEscapedProperty('legendEnabled', previousConfig))),
+                chartHeight = this._propertyExists('chartHeight', configChanges) ? parseInt(this._getEscapedProperty('chartHeight', configChanges)):parseInt(this._getEscapedProperty('chartHeight', previousConfig)),
+                chartWidth = this._propertyExists('chartWidth', configChanges) ? parseInt(this._getEscapedProperty('chartWidth', configChanges)):parseInt(this._getEscapedProperty('chartWidth', previousConfig)),
+                maxValue = this._propertyExists('maxValue', configChanges) ? parseFloat(this._getEscapedProperty('maxValue', configChanges)):parseFloat(this._getEscapedProperty('maxValue', previousConfig)),
+                levels = this._propertyExists('levels', configChanges) ? parseInt(this._getEscapedProperty('levels', configChanges)):parseInt(this._getEscapedProperty('levels', previousConfig)),
+                format = this._propertyExists('format', configChanges) ? this._getEscapedProperty('format', configChanges):this._getEscapedProperty('format', previousConfig),
+                isRounded = this._propertyExists('isRounded', configChanges) ? this.isArgTrue(parseInt(this._getEscapedProperty('isRounded', configChanges))):this.isArgTrue(parseInt(this._getEscapedProperty('isRounded', previousConfig))),
+                fullScreen = this._propertyExists('fullScreen', configChanges) ? this.isArgTrue(parseInt(this._getEscapedProperty('fullScreen', configChanges))):this.isArgTrue(parseInt(this._getEscapedProperty('fullScreen', previousConfig))),
+                legendSymbol = this._propertyExists('legendSymbol', configChanges) ? this._getEscapedProperty('legendSymbol', configChanges):this._getEscapedProperty('legendSymbol', previousConfig),
+                legendToggleSymbol = this._propertyExists('legendToggleSymbol', configChanges) ? this._getEscapedProperty('legendToggleSymbol', configChanges):this._getEscapedProperty('legendToggleSymbol', previousConfig),
+                legendPositionX = this._propertyExists('legendPositionX', configChanges) ? parseInt(this._getEscapedProperty('legendPositionX', configChanges)):parseInt(this._getEscapedProperty('legendPositionX', previousConfig)),
+                legendPositionY = this._propertyExists('legendPositionY', configChanges) ? parseInt(this._getEscapedProperty('legendPositionY', configChanges)):parseInt(this._getEscapedProperty('legendPositionY', previousConfig)),
+                legendFontColor = this._propertyExists('legendFontColor', configChanges) ? this._getEscapedProperty('legendFontColor', configChanges):this._getEscapedProperty('legendFontColor', previousConfig),
+                axesLineColor = this._propertyExists('axesLineColor', configChanges) ? this._getEscapedProperty('axesLineColor', configChanges):this._getEscapedProperty('axesLineColor', previousConfig),
+                axesLabelFontColor = this._propertyExists('axesLabelFontColor', configChanges) ? this._getEscapedProperty('axesLabelFontColor', configChanges):this._getEscapedProperty('axesLabelFontColor', previousConfig),
+                axesLegendFontColor = this._propertyExists('axesLegendFontColor', configChanges) ? this._getEscapedProperty('axesLegendFontColor', configChanges):this._getEscapedProperty('axesLegendFontColor', previousConfig),
+                circlesColor = this._propertyExists('circlesColor', configChanges) ? this._getEscapedProperty('circlesColor', configChanges):this._getEscapedProperty('circlesColor', previousConfig),
+                circlesFillColor = this._propertyExists('circlesFillColor', configChanges) ? this._getEscapedProperty('circlesFillColor', configChanges):this._getEscapedProperty('circlesFillColor', previousConfig),
+                areasOpacity = this._propertyExists('areasOpacity', configChanges) ? parseFloat(this._getEscapedProperty('areasOpacity', configChanges)):parseFloat(this._getEscapedProperty('areasOpacity', previousConfig)),
+                circlesOpacity = this._propertyExists('circlesOpacity', configChanges) ? parseFloat(this._getEscapedProperty('circlesOpacity', configChanges)):parseFloat(this._getEscapedProperty('circlesOpacity', previousConfig))
 
-            if(legendEnabled) {
-                this.radarChart.options({legend: {display: true}}).rounded(true).update()
+            // Set default options from format parameters
+			let radarChartOptions = {
+				width: chartWidth,
+				height: chartHeight,
+				format: format,
+				legend: {
+					display: legendEnabled,
+					symbol: legendSymbol,
+					toggle: legendToggleSymbol,
+                    position: {x: legendPositionX, y: legendPositionY},
+                    fontColor: legendFontColor
+				},
+				areas: {
+					opacity: areasOpacity
+				},
+				circles: {
+					color: circlesColor,
+					fill: circlesFillColor,
+					opacity: circlesOpacity
+				},
+				axes: {
+                    lineColor: axesLineColor,
+                    axesLabelFontColor: axesLabelFontColor,
+                    axesLegendFontColor: axesLegendFontColor
+				}
+            }
+            
+            this.radarChart
+                .options(radarChartOptions)
+                .rounded(isRounded)
+                .maxValue(maxValue)
+                .levels(levels)
+                .update()
+
+
+            if(legendEnabled) {                
                 $('.rcLegend').show()
+                $('.rcAxisLegend').attr("fill", axesLegendFontColor)
+                $('.rcAxisLabel').attr("fill", axesLabelFontColor)
+                $('.label').attr("fill", legendFontColor)
             } else {
                 $('.rcLegend').hide()
             }
-    
         },
 
         _propertyExists: function(name, config) {
