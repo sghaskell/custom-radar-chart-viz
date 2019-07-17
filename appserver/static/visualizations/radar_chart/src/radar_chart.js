@@ -174,7 +174,7 @@ define([
                 }
             }, this);
 
-            
+            console.log(this.allAxes)
             // Fill in missing axes for each category
             _.each(this.categories, function(v, i) {
                 v.fillMissingAxis(this.allAxes);  
