@@ -8973,6 +8973,10 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	            };
 
 	            this.fillMissingAxis = function(allAxes) {
+	                // Sort the axes so we insert in the correct spot if missing
+	                allAxes.sort()
+	                this.axes.sort()
+
 	                _.each(allAxes, function(v, i) {
 	                    if(!this.axes.includes(v)) {
 	                        this.vals.splice(i, 0, {axis: v, value: 0})
@@ -9078,7 +9082,7 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	                }
 	            }, this);
 
-	            
+	            console.log(this.allAxes)
 	            // Fill in missing axes for each category
 	            _.each(this.categories, function(v, i) {
 	                v.fillMissingAxis(this.allAxes);  

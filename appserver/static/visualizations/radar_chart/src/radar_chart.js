@@ -69,6 +69,10 @@ define([
             };
 
             this.fillMissingAxis = function(allAxes) {
+                // Sort the axes so we insert in the correct spot if missing
+                allAxes.sort()
+                this.axes.sort()
+
                 _.each(allAxes, function(v, i) {
                     if(!this.axes.includes(v)) {
                         this.vals.splice(i, 0, {axis: v, value: 0})
