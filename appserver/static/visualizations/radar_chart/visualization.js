@@ -8943,9 +8943,12 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.legendEnabled': "1",
 	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.legendSymbol': "cross",
 	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.legendToggleSymbol': "circle",
+	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.legendFontSize': "12",
 	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.legendPositionX': 25,
 	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.legendPositionY': 25,
 	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.legendFontColor': "black",
+	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.axesLegendFontSize': "12",
+	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.axesLabelFontSize': "12",
 	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.axesLineColor': "white",
 	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.axesLabelFontColor': "#737373",
 	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.axesLegendFontColor': "black",
@@ -8999,9 +9002,12 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	                fullScreen = this._propertyExists('fullScreen', configChanges) ? this.isArgTrue(parseInt(this._getEscapedProperty('fullScreen', configChanges))):this.isArgTrue(parseInt(this._getEscapedProperty('fullScreen', previousConfig))),
 	                legendSymbol = this._propertyExists('legendSymbol', configChanges) ? this._getEscapedProperty('legendSymbol', configChanges):this._getEscapedProperty('legendSymbol', previousConfig),
 	                legendToggleSymbol = this._propertyExists('legendToggleSymbol', configChanges) ? this._getEscapedProperty('legendToggleSymbol', configChanges):this._getEscapedProperty('legendToggleSymbol', previousConfig),
+	                legendFontSize = this._propertyExists('legendFontSize', configChanges) ? this._getEscapedProperty('legendFontSize', configChanges):this._getEscapedProperty('legendFontSize', previousConfig),
 	                legendPositionX = this._propertyExists('legendPositionX', configChanges) ? parseInt(this._getEscapedProperty('legendPositionX', configChanges)):parseInt(this._getEscapedProperty('legendPositionX', previousConfig)),
 	                legendPositionY = this._propertyExists('legendPositionY', configChanges) ? parseInt(this._getEscapedProperty('legendPositionY', configChanges)):parseInt(this._getEscapedProperty('legendPositionY', previousConfig)),
 	                legendFontColor = this._propertyExists('legendFontColor', configChanges) ? this._getEscapedProperty('legendFontColor', configChanges):this._getEscapedProperty('legendFontColor', previousConfig),
+	                axesLegendFontSize = this._propertyExists('axesLegendFontSize', configChanges) ? this._getEscapedProperty('axesLegendFontSize', configChanges):this._getEscapedProperty('axesLegendFontSize', previousConfig),
+	                axesLabelFontSize = this._propertyExists('axesLabelFontSize', configChanges) ? this._getEscapedProperty('axesLabelFontSize', configChanges):this._getEscapedProperty('axesLabelFontSize', previousConfig),
 	                axesLineColor = this._propertyExists('axesLineColor', configChanges) ? this._getEscapedProperty('axesLineColor', configChanges):this._getEscapedProperty('axesLineColor', previousConfig),
 	                axesLabelFontColor = this._propertyExists('axesLabelFontColor', configChanges) ? this._getEscapedProperty('axesLabelFontColor', configChanges):this._getEscapedProperty('axesLabelFontColor', previousConfig),
 	                axesLegendFontColor = this._propertyExists('axesLegendFontColor', configChanges) ? this._getEscapedProperty('axesLegendFontColor', configChanges):this._getEscapedProperty('axesLegendFontColor', previousConfig),
@@ -9033,7 +9039,8 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 					axes: {
 	                    lineColor: axesLineColor,
 	                    axesLabelFontColor: axesLabelFontColor,
-	                    axesLegendFontColor: axesLegendFontColor
+	                    axesLegendFontColor: axesLegendFontColor,
+	                    fontWidth: axesLegendFontSize + "px"
 					}
 	            }
 	            
@@ -9044,12 +9051,14 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	                .levels(levels)
 	                .update()
 
-
 	            if(legendEnabled) {                
 	                $('.rcLegend').show()
 	                $('.rcAxisLegend').attr("fill", axesLegendFontColor)
 	                $('.rcAxisLabel').attr("fill", axesLabelFontColor)
 	                $('.label').attr("fill", legendFontColor)
+	                $('.label').css("font-size", legendFontSize + "px")
+	                $('.rcAxisLabel').css("font-size", axesLabelFontSize + "px")
+	                $('.rcAxisLegend').css("font-size", axesLegendFontSize + "px")
 	            } else {
 	                $('.rcLegend').hide()
 	            }
@@ -9196,9 +9205,12 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	                legendEnabled = parseInt(this._getEscapedProperty('legendEnabled', config)),
 	                legendSymbol= this._getEscapedProperty('legendSymbol', config) || "cross",
 	                legendToggleSymbol= this._getEscapedProperty('legendToggleSymbol', config) || "circle",
+	                legendFontSize = this._getEscapedProperty('legendFontSize', config) || "12px",
 	                legendPositionX = parseInt(this._getEscapedProperty('legendPositionX', config)) || 25,
 	                legendPositionY = parseInt(this._getEscapedProperty('legendPositionY', config)) || 25,
 	                legendFontColor = this._getEscapedProperty('legendFontColor', config) || "black",
+	                axesLegendFontSize = this._getEscapedProperty('axesLegendFontSize', config) || "12",
+	                axesLabelFontSize = this._getEscapedProperty('axesLabelFontSize', config) || "12",
 	                axesLineColor = this._getEscapedProperty('axesLineColor', config) || "white",
 	                axesLabelFontColor = this._getEscapedProperty('axesLabelFontColor', config) || "#737373",
 	                axesLegendFontColor = this._getEscapedProperty('axesLegendFontColor', config) || "black",
@@ -9206,7 +9218,6 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	                circlesFillColor = this._getEscapedProperty('circlesFillColor', config) || "#CDCDCD",
 	                areasOpacity = parseFloat(this._getEscapedProperty('areasOpacity', config)),
 	                circlesOpacity = parseFloat(this._getEscapedProperty('circlesOpacity', config))
-
 
 	            // Initialize Viz
 	            if (!this.isInitializedDom) {
@@ -9246,7 +9257,8 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 					axes: {
 	                    lineColor: axesLineColor,
 	                    axesLabelFontColor: axesLabelFontColor,
-	                    axesLegendFontColor: axesLegendFontColor
+	                    axesLegendFontColor: axesLegendFontColor,
+	                    fontWidth: axesLegendFontSize + "px"
 					}
 				};
 	            
@@ -9294,6 +9306,8 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	            }, this); 
 
 	            this.radarChart.update()
+	            $('.label').css("font-size", legendFontSize + "px")
+	            $('.rcAxisLabel').css("font-size", axesLabelFontSize + "px")
 
 	            return this
 	        },
