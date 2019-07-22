@@ -8929,6 +8929,8 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	        validFields: ["key","axis","value","keyColor"],
 	        allAxes: [],
 	        categories: {},
+	        parentEl: null,
+	        parentView: null,
 	        defaultConfig: {
 	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.chartHeight': 500,
 	            'display.visualizations.custom.custom-radar-chart-viz.radar_chart.chartWidth': 500,
@@ -9051,6 +9053,14 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	            } else {
 	                $('.rcLegend').hide()
 	            }
+
+	            if(fullScreen) {
+	                this._setFullScreenMode(this.parentEl, {radarChart: this.radarChart})
+	            } else {
+	                $("div[data-cid=" + this.parentEl + "]").css("height", chartHeight);
+	                this.radarChart.options({height: chartHeight, width: chartWidth}).update()
+	                $(window).off("resize")
+	            }
 	        },
 
 	        _propertyExists: function(name, config) {
@@ -9092,6 +9102,25 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	            }, this);
 	        },
 
+	        _setFullScreenMode: function(parentEl, options) {
+	            // Map Full Screen Mode
+	            var vh = $(window).height()
+	            var vw = $(window).width()
+
+	            $("div[data-cid=" + parentEl + "]").css("height", vh)
+	            $("div[data-cid=" + parentEl + "]").css("width", vw)
+	            options.radarChart.options({height: vh, width: vw}).update()
+
+	            $(window).resize(function() {
+	                var vh = $(window).height()
+	                var vw = $(window).width()
+
+	                $("div[data-cid=" + parentEl + "]").css("height", vh)
+	                $("div[data-cid=" + parentEl + "]").css("width", vw)
+	                options.radarChart.options({height: vh, width: vw}).update();
+	            });
+	        },
+
 	        initialize: function() {
 	            SplunkVisualizationBase.prototype.initialize.apply(this, arguments);
 	            this.$el = $(this.el);
@@ -9115,7 +9144,7 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	            _.each(data.results, function(v, i, obj) {
 	                try {
 	                    // Key exists, update
-	                    if(_.has(this.categories, v.key) && !this.categories[v.key].isCharted) {
+	                    if(_.has(this.categories, v.key)) {
 	                        this.categories[v.key].update(v.axis, {data: v.value});
 	                    } else {
 	                        if(v.key) {
@@ -9136,7 +9165,6 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	                }
 	            }, this);
 
-	            console.log(this.allAxes)
 	            // Fill in missing axes for each category
 	            _.each(this.categories, function(v, i) {
 	                v.fillMissingAxis(this.allAxes);  
@@ -9151,6 +9179,10 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	        updateView: function(categories, config) {
 	            if(_.keys(config).length <= 1) {
 	                config = this.defaultConfig;
+	            }
+
+	            if(_.isEmpty(this.categories)) {
+	                return this
 	            }
 
 	            // Get Format menu parameters
@@ -9180,6 +9212,7 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	            if (!this.isInitializedDom) {
 	                var radarChart = this.radarChart = {}
 	                var radarChartOptions = this.radarChartOptions = {}
+
 
 					// Create radar chart
 	                this.radarChart = new RadarChart(format)
@@ -9216,56 +9249,47 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	                    axesLegendFontColor: axesLegendFontColor
 					}
 				};
-				
-				this.radarChart
+	            
+	            this.radarChart
 					.options(this.radarChartOptions)
 					.rounded(this.isArgTrue(isRounded))
 					.maxValue(maxValue) 
 					.levels(levels) 
-					.update();
+	                //.update()
+
+	            this.radarChart.clear()
 
 	            // Get parent element of div to resize
-	            var parentEl = $(this.el).parent().parent().closest("div").attr("data-cid");
+	            this.parentEl = $('div[class="shared-reportvisualizer ui-resizable ui-resizable-autohide"]')[0].attributes[0].nodeValue
 
-	            // Map Full Screen Mode
+
+	            // Set fullscreen or height/width
 	            if (this.isArgTrue(fullScreen)) {
-	                var vh = $(window).height();
-	                var vw = $(window).width();
-	                $("div[data-cid=" + parentEl + "]").css("height", vh);
-
-	                $(window).resize(function() {
-	                    var vh = $(window).height();
-	                    $("div[data-cid=" + parentEl + "]").css("height", vh);
-	                });
-	                this.radarChart.options({height: vh, width: vw}).update();
+	                this._setFullScreenMode(this.parentEl, {radarChart: this.radarChart})
 	            } else {
-	                $("div[data-cid=" + parentEl + "]").css("height", chartHeight);
+	                $("div[data-cid=" + this.parentEl + "]").css("height", chartHeight)
+	                $("div[data-cid=" + this.parentEl + "]").css("width", chartWidth)
 	                this.radarChart.options({height: chartHeight, width: chartWidth}).update();
 	            }
 
 	            _.each(categories, function(v, i, obj) {
-	                try {
-	                    if(!v.isCharted) {
-	                        this.radarChart.push({key: v.key, values: v.vals});
-	                        // Check for custom color and set
-	                        if(v.keyColor) {
-	                            // get current colors so we don't clobber them
-	                            var c = this.radarChart.colors();
-	                            c[v.key] = v.keyColor;
-	                            this.radarChart.colors(c);
-	                        }
-	                        // We've charted it
-	                        v.isCharted = true;
+	                    // this.radarChart.push({key: v.key, values: v.vals});
+	                    // Check for custom color and set
+	                    if(v.keyColor) {
+	                        // get current colors so we don't clobber them
+	                        var c = this.radarChart.colors()
+	                        c[v.key] = v.keyColor
 	                    }
-	                } catch (err) {
-	                    console.error(err);
-	                }
+
+	                    this.radarChart
+	                      .push({key: v.key, values: v.vals})
+	                      .colors(c)
 	            }, this); 
 
-	            this.radarChart.update();
+	            this.radarChart.update()
 
-	            return this;
-	            },
+	            return this
+	        },
 
 	        // Search data params
 	        getInitialDataParams: function() {
@@ -9275,10 +9299,6 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	            });
 	        },
 
-	        // Override to respond to re-sizing events
-	        reflow: function() {
-	            this.invalidateUpdateView();
-	        },
 	    });
 	}.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
 
@@ -32374,7 +32394,12 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	         }, transition_time);
 	    }
 
-	    chart.data = function(value) {
+	   chart.clear = function() {
+	      _data = []
+	      data = []
+	   }
+
+	   chart.data = function(value) {
 	        if (!arguments.length) return data;
 	        if (legend_toggles.length) {
 	           var keys = _data.map(function(m) {return m.key});
@@ -32401,6 +32426,7 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	        }
 
 	        function check_key(one_row) {
+	           
 	           if (one_row.key && data.map(function(m) { return m.key }).indexOf(one_row.key) < 0) {
 	              data.push(one_row);
 	           }
