@@ -9259,9 +9259,16 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 
 	            this.radarChart.clear()
 
-	            // Get parent element of div to resize
-	            this.parentEl = $('div[class="shared-reportvisualizer ui-resizable ui-resizable-autohide"]')[0].attributes[0].nodeValue
+	            // Get parent element of div to resize 
+	            // Nesting of Div's is different, try 7.x first
+	            this.parentEl = $(this.el).parent().parent().parent().parent().parent().closest("div").attr("data-cid")
+	            this.parentView = $(this.el).parent().parent().parent().parent().parent().closest("div").attr("data-view")
 
+	            // Default to 6.x view
+	            if(this.parentView != 'views/shared/ReportVisualizer') {
+	                this.parentEl = $(this.el).parent().parent().closest("div").attr("data-cid")
+	                this.parentView = $(this.el).parent().parent().closest("div").attr("data-view")
+	            }
 
 	            // Set fullscreen or height/width
 	            if (this.isArgTrue(fullScreen)) {
