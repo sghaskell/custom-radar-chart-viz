@@ -729,7 +729,12 @@ RadarChart = function (format) {
          }, transition_time);
     }
 
-    chart.data = function(value) {
+   chart.clear = function() {
+      _data = []
+      data = []
+   }
+
+   chart.data = function(value) {
         if (!arguments.length) return data;
         if (legend_toggles.length) {
            var keys = _data.map(function(m) {return m.key});
@@ -756,6 +761,7 @@ RadarChart = function (format) {
         }
 
         function check_key(one_row) {
+           
            if (one_row.key && data.map(function(m) { return m.key }).indexOf(one_row.key) < 0) {
               data.push(one_row);
            }
