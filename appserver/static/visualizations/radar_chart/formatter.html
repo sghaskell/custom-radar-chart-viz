@@ -14,6 +14,20 @@
         </div>
     </div>
     <div class="control-group">
+        <label class="control-label">Circles Color</label>
+        <div class="controls controls-block">
+            <splunk-color-picker type="splunkCategorical" name="{{VIZ_NAMESPACE}}.circlesColor" value="#CDCDCD"></splunk-color-picker>
+            <span class="help-block ">Specify color for cicles</span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Circles Fill Color</label>
+        <div class="controls controls-block">
+            <splunk-color-picker type="splunkCategorical" name="{{VIZ_NAMESPACE}}.circlesFillColor" value="#CDCDCD"></splunk-color-picker>
+            <span class="help-block ">Specify color for cicles</span>
+        </div>
+    </div>
+    <div class="control-group">
         <label class="control-label">Max Value</label>
         <div class="controls controls-block">
             <splunk-text-input name="{{VIZ_NAMESPACE}}.maxValue" value="1"></splunk-text-input>
@@ -34,6 +48,20 @@
             <span class="help-block ">Specify number format - see https://github.com/d3/d3-format.</span>
         </div>
     </div>
+    <div class="control-group">
+        <label class="control-label">Areas Opacity</label>
+        <div class="controls controls-block">
+            <splunk-text-input name="{{VIZ_NAMESPACE}}.areasOpacity" value="0.35"></splunk-text-input>
+            <span class="help-block ">Specify areas opacity (range: 0 - 1.0)</span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Circles Opacity</label>
+        <div class="controls controls-block">
+            <splunk-text-input name="{{VIZ_NAMESPACE}}.circlesOpacity" value="0.1"></splunk-text-input>
+            <span class="help-block ">Specify circles opacity (range: 0 - 1.0)</span>
+        </div>
+        </div>
     <div class="control-group">
         <label class="control-label">Rounded</label>
         <div class="controls controls-block">
@@ -76,6 +104,13 @@
         </div>
     </div>
     <div class="control-group">
+        <label class="control-label">Legend Font Color</label>
+        <div class="controls controls-block">
+            <splunk-color-picker type="splunkCategorical" name="{{VIZ_NAMESPACE}}.legendFontColor" value="#000000"></splunk-color-picker>
+            <span class="help-block ">Specify color for legend text</span>
+        </div>
+    </div>
+    <div class="control-group">
         <label class="control-label">Legend Symbol</label>
         <div class="controls controls-block">
             <splunk-select name="{{VIZ_NAMESPACE}}.legendSymbol" value="cross">
@@ -102,6 +137,13 @@
         </div>
     </div>
     <div class="control-group">
+        <label class="control-label">Font Size</label>
+        <div class="controls controls-block">
+            <splunk-text-input name="{{VIZ_NAMESPACE}}.legendFontSize" value="12"></splunk-text-input>
+            <span class="help-block ">Specify legend font size in pixels</span>
+        </div>
+    </div>
+    <div class="control-group">
         <label class="control-label">Position X</label>
         <div class="controls controls-block">
             <splunk-text-input name="{{VIZ_NAMESPACE}}.legendPositionX" value="25"></splunk-text-input>
@@ -116,26 +158,26 @@
         </div>
     </div>
 </form>
-<form class="splunk-formatter-section" section-label="Colors">
+<form class="splunk-formatter-section" section-label="Axes">
+    <div class="control-group">
+        <label class="control-label">Axes Legend Font Size</label>
+        <div class="controls controls-block">
+            <splunk-text-input name="{{VIZ_NAMESPACE}}.axesLegendFontSize" value="12"></splunk-text-input>
+            <span class="help-block ">Specify axes legend font size in pixels</span>
+        </div>
+    </div>
+    <div class="control-group">
+        <label class="control-label">Axes Label Font Size</label>
+        <div class="controls controls-block">
+            <splunk-text-input name="{{VIZ_NAMESPACE}}.axesLabelFontSize" value="12"></splunk-text-input>
+            <span class="help-block ">Specify axes label font size in pixels</span>
+        </div>
+    </div>
     <div class="control-group">
         <label class="control-label">Axes Line Color</label>
         <div class="controls controls-block">
             <splunk-color-picker type="splunkCategorical" name="{{VIZ_NAMESPACE}}.axesLineColor" value="#FFFFFF"></splunk-color-picker>
             <span class="help-block ">Specify line color for Axes</span>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label">Circles Color</label>
-        <div class="controls controls-block">
-            <splunk-color-picker type="splunkCategorical" name="{{VIZ_NAMESPACE}}.circlesColor" value="#CDCDCD"></splunk-color-picker>
-            <span class="help-block ">Specify color for cicles</span>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label">Circles Fill Color</label>
-        <div class="controls controls-block">
-            <splunk-color-picker type="splunkCategorical" name="{{VIZ_NAMESPACE}}.circlesFillColor" value="#CDCDCD"></splunk-color-picker>
-            <span class="help-block ">Specify color for cicles</span>
         </div>
     </div>
     <div class="control-group">
@@ -150,29 +192,6 @@
         <div class="controls controls-block">
             <splunk-color-picker type="splunkCategorical" name="{{VIZ_NAMESPACE}}.axesLabelFontColor" value="#737373"></splunk-color-picker>
             <span class="help-block ">Specify color for axes label text</span>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label">Legend Font Color</label>
-        <div class="controls controls-block">
-            <splunk-color-picker type="splunkCategorical" name="{{VIZ_NAMESPACE}}.legendFontColor" value="#000000"></splunk-color-picker>
-            <span class="help-block ">Specify color for legend text</span>
-        </div>
-    </div>
-</form>
-<form class="splunk-formatter-section" section-label="Opacity">
-    <div class="control-group">
-        <label class="control-label">Areas Opacity</label>
-        <div class="controls controls-block">
-            <splunk-text-input name="{{VIZ_NAMESPACE}}.areasOpacity" value="0.35"></splunk-text-input>
-            <span class="help-block ">Specify areas opacity (range: 0 - 1.0)</span>
-        </div>
-    </div>
-    <div class="control-group">
-        <label class="control-label">Circles Opacity</label>
-        <div class="controls controls-block">
-            <splunk-text-input name="{{VIZ_NAMESPACE}}.circlesOpacity" value="0.1"></splunk-text-input>
-            <span class="help-block ">Specify circles opacity (range: 0 - 1.0)</span>
         </div>
     </div>
 </form>
