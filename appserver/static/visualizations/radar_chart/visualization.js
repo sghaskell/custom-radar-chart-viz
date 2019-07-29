@@ -9292,11 +9292,11 @@ define(["api/SplunkVisualizationBase","api/SplunkVisualizationUtils"], function(
 	            }
 
 	            _.each(categories, function(v, i, obj) {
-	                    // this.radarChart.push({key: v.key, values: v.vals});
+	                    // get current colors so we don't clobber them
+	                    var c = this.radarChart.colors()
+	                    
 	                    // Check for custom color and set
-	                    if(v.keyColor) {
-	                        // get current colors so we don't clobber them
-	                        var c = this.radarChart.colors()
+	                    if(_.has(v, 'keyColor')) {
 	                        c[v.key] = v.keyColor
 	                    }
 
